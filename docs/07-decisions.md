@@ -59,6 +59,16 @@ This matches the existing PCB module.
 **Why:** permissive, so anyone can build on it (including commercially); Apache-2.0
 adds an explicit patent grant; same terms as SolidCraft and most of the Rust ecosystem.
 
+## ADR-10 — Two-way ECAD ↔ MCAD integration with owners and change proposals (accepted, 2026-11-11)
+
+**Context:** Fusion 360 grew mechanical-first because of Autodesk's history; we built
+electronics first because it is our strongest asset. Real products lead from either side.
+**Decision:** build order does not define usage order. Every shared value has one
+owner; the other side gets a locked constraint; changes travel as change proposals that
+are accepted or rejected, never as silent overwrites. Both flows (shape first, board
+first) are part of milestone M3. Design: [09-ecad-mcad.md](09-ecad-mcad.md).
+**Prior art to study:** IDX/EDMD (ProSTEP iViP) incremental ECAD–MCAD exchange.
+
 ## Open questions
 
 1. Desktop shell (Tauri or other) and how solvers are bundled for offline use.

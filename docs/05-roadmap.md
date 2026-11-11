@@ -9,7 +9,7 @@ The PCB module keeps its own phase plan (phases 5–7) and continues in parallel
 | **M0** | Foundations | `AGENTS.md`, design docs, decisions | ✅ docs written |
 | **M1** | Project core | `hassassin.project` JSON Schema, `packages/platform` (read/write manifest, documents, interfaces, status computation), `hassassin` CLI: `init`, `status`, `check` | |
 | **M2** | PCB joins the monorepo | PCB repo moved to `modules/pcb/` with history; PCB adapter (entities, BOM); STEP export of a board | waits for owner |
-| **M3** | PCB → enclosure | Mech adapter for SolidCraft (STEP/MCP); enclosure generated from board entities; `mount`/`cutout` interfaces go stale when the board changes | |
+| **M3** | Two-way ECAD ↔ MCAD | Mech adapter for SolidCraft (STEP/MCP); ownership + change proposals; demo A: board → enclosure; demo B: enclosure envelope → locked board outline, holes, keepouts, and pinned connector positions in the PCB ([09](09-ecad-mcad.md)) | |
 | **M4** | Hub v0 | Web hub: project home, documents, stages & gates, interface board, combined BOM; local server; offline | |
 | **M5** | AI orchestrator v0 | Agent connected to PCB + SolidCraft MCP + platform tools; task list; stops at gates; journey J1 steps 1–5 | |
 | **M6** | Embedded v0 | Firmware project from schematic (pin map), build via PlatformIO, flash via WebSerial; `pinmap` interface | |
@@ -25,9 +25,12 @@ The PCB module keeps its own phase plan (phases 5–7) and continues in parallel
   (ok/stale/conflict/broken).
 - **M2:** all existing PCB tests pass inside the monorepo; STEP export opens in
   SolidCraft and another STEP viewer with correct outline, holes, and thickness.
-- **M3:** moving a mounting hole or connector in the PCB marks the right interface
-  stale; accepting the fix updates the enclosure; tested with a real board from the
-  owner's projects.
+- **M3:** both demos run on a real board from the owner's projects. Moving a hole or
+  connector on the owning side opens a change proposal on the other side; accepting it
+  updates that side, rejecting it keeps the interface stale with the reason recorded.
+  In demo B the PCB shows outline/holes as read-only and DRC flags keepout and
+  placement violations. Combined-assembly collision and height checks report results
+  to the Integration gate.
 - **M4:** the hub runs with no internet connection; all project data stays in the folder.
 - **M5:** every AI step is an undoable transaction and visible in history; the agent
   never passes a gate without approval; works with a mock model in tests.

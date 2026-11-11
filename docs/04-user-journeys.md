@@ -37,6 +37,19 @@ workflow, embedded pin-map generation, SPICE, AI orchestrator.
    the mechanical tool; the engineer reviews the diff and accepts.
 5. Saves a release "Proto B"; syncs to the team's self-hosted server when back online.
 
+## J2b — Designer: shape first
+
+1. An industrial designer models a handheld remote in the mechanical module and draws
+   the PCB envelope inside it: outline, four screw holes, a low-height zone under the
+   battery, and required positions for three buttons and an LED.
+2. The hub creates `outline`, `mount`, `keepout`, and `placement` interfaces owned by
+   the mechanical side.
+3. The electronics engineer opens the PCB: the outline and holes are locked, the
+   buttons and LED are pinned in place, and DRC flags any part that is too tall in the
+   battery zone.
+4. The engineer needs 1 mm more width for routing and sends a change proposal on the
+   outline; the designer accepts it, and the enclosure updates.
+
 ## J3 — Educator: offline lab
 
 1. Installs the desktop app on lab computers without internet access.

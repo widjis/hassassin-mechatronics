@@ -38,7 +38,9 @@ Exposes to other modules:
 | Electronic BOM lines | platform BOM |
 
 Needed for the ecosystem: **STEP export** of the board (outline + holes + component
-bodies) and an entity API on top of the existing tool layer.
+bodies), an entity API on top of the existing tool layer, and constraints from
+interfaces owned by the mechanical side (locked outline/holes, keepout rules, pinned
+placements) — see [09-ecad-mcad.md](09-ecad-mcad.md).
 
 ---
 

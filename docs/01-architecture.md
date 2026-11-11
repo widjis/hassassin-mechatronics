@@ -51,17 +51,27 @@ Explicit links between **entities** in two different documents. Examples:
 
 | Interface | Side A | Side B | Checked |
 |---|---|---|---|
+| `outline` | PCB board outline | enclosure pocket / PCB envelope sketch | shape, thickness |
 | `mount` | PCB mounting hole | enclosure boss/hole | position, diameter |
+| `keepout` | PCB region | CAD region (ribs, lid, battery) | shape, max component height |
+| `placement` | PCB component (button, LED, display) | required position in CAD | position, rotation, side |
 | `cutout` | USB-C connector on the PCB | opening in the enclosure wall | position, size, side |
 | `envelope` | tallest component height | enclosure inner space | clearance |
 | `pinmap` | MCU pin + schematic net | firmware GPIO definition | name, pin number, function |
 | `actuator` | motor + driver (PCB/BOM) | robot joint | torque, speed, direction |
 | `sensor` | sensor on the PCB | frame in the robot model | position, orientation |
 
-Each interface stores the **agreed value** and the version of both sides. Adapters read
-the actual values; when they differ, the hub marks the interface as *stale* and shows the
-change like an ECO (engineering change order): who changed what, and which side has to
-follow. The AI can propose the fix; a person approves it.
+Each interface stores the **agreed value**, the version of both sides, and its
+**owner** — the one side allowed to change the value. The other side treats it as a
+locked constraint. Adapters read the actual values; when they differ, the hub marks the
+interface as *stale* and opens a **change proposal** (like an ECO, engineering change
+order): who changed what, and what the other side must do. The receiving side accepts
+(and is updated, by a person or by the AI) or rejects with a reason. Nothing is
+overwritten silently.
+
+Integration works in **both directions** — mechanical-led (shape first, the board must
+fit) and electronics-led (board first, the enclosure follows). Details:
+[09-ecad-mcad.md](09-ecad-mcad.md).
 
 ### 3. Adapters
 

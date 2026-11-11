@@ -41,6 +41,7 @@ paths are relative to that folder and use `/`.
       "type": "mount",
       "a": { "doc": "pcb",  "entity": "hole:H1" },
       "b": { "doc": "case", "entity": "feature:Boss1" },
+      "owner": "a",
       "agreed": { "position": [3.5, 3.5], "diameter": 3.2, "unit": "mm" },
       "seen": { "a": "rev:41", "b": "rev:12" },
       "status": "ok"
@@ -50,9 +51,17 @@ paths are relative to that folder and use `/`.
       "type": "cutout",
       "a": { "doc": "pcb",  "entity": "component:J1" },
       "b": { "doc": "case", "entity": "feature:UsbOpening" },
+      "owner": "a",
       "agreed": { "center": [0, -21.0, 1.8], "size": [9.2, 3.4], "side": "-y" },
       "status": "stale",
-      "change": { "by": "pcb", "summary": "J1 moved 2.0 mm in +x", "at": "2026-11-12T10:15:00Z" }
+      "proposal": {
+        "id": "CP-7",
+        "from": "a",
+        "summary": "J1 moved 2.0 mm in +x",
+        "value": { "center": [2.0, -21.0, 1.8], "size": [9.2, 3.4], "side": "-y" },
+        "at": "2026-11-12T10:15:00Z",
+        "state": "open"
+      }
     },
     {
       "id": "IF-pins",
@@ -95,17 +104,22 @@ paths are relative to that folder and use `/`.
 | Field | Meaning |
 |---|---|
 | `id` | Unique in the project |
-| `type` | `mount`, `cutout`, `envelope`, `pinmap`, `actuator`, `sensor`, … (extensible) |
+| `type` | `outline`, `mount`, `keepout`, `placement`, `cutout`, `envelope`, `pinmap`, `actuator`, `sensor`, … (extensible) |
+| `owner` | `"a"` or `"b"`: the side allowed to change the agreed value; the other side gets a locked constraint |
 | `a`, `b` | Entity references `{doc, entity}`; entity ids are defined by each adapter (`hole:H1`, `component:J1`, `feature:Boss1`, `joint:shoulder`) |
 | `agreed` | The values both sides agreed on (units explicit) |
 | `seen` | Document revision of each side when last checked |
 | `status` | `ok`, `stale` (one side changed), `conflict` (both changed), `broken` (entity missing) |
-| `change` | When not `ok`: which side changed, summary, time |
+| `proposal` | When not `ok`: open change proposal — `id`, `from` (side), `summary`, proposed `value`, `at`, `state` (`open`, `accepted`, `rejected`) and, when decided, `by` and `reason` |
 
 Rules:
 - **Status is recomputed** by adapters; a stored `status` is a cache, not truth.
-- Resolving a stale interface = either update the other side (via its adapter/tool) or
-  accept the new value as `agreed`. Both are recorded in history.
+- A stale interface is resolved through its proposal: **accept** (the receiving side is
+  updated through its adapter/tool, and `value` becomes `agreed`) or **reject** (with a
+  reason; the owner is asked to revert). Decided proposals move to project history.
+- A change made by the non-owner side is itself a proposal to the owner.
+- Ownership changes are explicit and recorded in history.
+- Interface types and flows for mechanical ↔ electronics: [09-ecad-mcad.md](09-ecad-mcad.md).
 - Unknown `type`s must be preserved by every tool (forward compatibility).
 
 ## Open questions
