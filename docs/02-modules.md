@@ -8,10 +8,12 @@ License details are in [06-licensing.md](06-licensing.md).
 
 ## Hardware (PCB) — `modules/pcb`
 
-**Status: the most mature module.** Currently developed in the separate repository
-`hassassin-ai-pcb-designer`; it will move into `modules/pcb/` when the owner asks.
+**Status: the most mature module — all planned phases (0–7) done in their first
+version** (checked 2026-11-11, last commit `0b4b804`). Currently in the separate local
+repository `hassassin-ai-pcb-designer` (not pushed); it moves into `modules/pcb/` when the
+owner asks (M2).
 
-Already built (phases 0–4 of that repo):
+Already built:
 - browser PCB editor with a WebGL2 renderer and a CSS-like **rules engine** (object rules,
   rulesets with selectors, inheritance, computed vs specified values);
 - command layer with undo/redo; manual routing; ratsnest; DRC; copper pours;
@@ -19,11 +21,27 @@ Already built (phases 0–4 of that repo):
 - fabrication export (Gerber X2, Excellon, BOM, pick-and-place);
 - KiCad import (`.kicad_pcb`, hierarchical `.kicad_sch`), verified against real boards;
 - project stages and gates; shared tool layer; `hassassin` CLI and MCP server;
-- real-time collaboration server: comments, versions, fork, roles, live MCP.
+- real-time collaboration server: comments, versions, fork, roles, live MCP;
+- parts and libraries: parametric footprint generators, multi-unit parts with offers,
+  KiCad `.kicad_sym`/`.kicad_mod` import and installed-library search, team library,
+  BOM with cost per N boards (prices/stock via CSV or manual, no distributor API yet);
+- **in-app AI agent** over the same tools: chat-style Agent tab (task card, foldable tool
+  steps), Agent/Ask modes, backends Claude API, **Claude Code** or **Codex** (the user's
+  own subscription, signed in from the browser, restricted to the project's MCP server);
+- autorouter (A*, 45°, vias) and autoplacer, stackup and impedance calculator, net
+  lengths, differential pairs, length tuning, 3D board view (three.js, box bodies).
 
-Next in that repo: phase 5 (library and parts: footprints, KiCad library import,
-MPN/price/stock), phase 6 (in-app AI agent), phase 7 (autorouter, 3D, stackup,
-length tuning).
+Known gaps that matter for the ecosystem:
+- **no STEP export** and no real 3D component models (boxes from courtyards);
+- no entity API for outline/holes/connector frames; no constraints coming from another
+  document (locked outline, height keepouts, pinned placements);
+- requirements and stage gates live inside the `.hpcb` file; in the ecosystem they move
+  up to the project manifest, and PCB gates become domain checks (stage 3);
+- docs are in Indonesian (repo rule: English); no license file yet (inherits MIT OR
+  Apache-2.0 on the move);
+- its `hassassin` CLI/MCP becomes part of the ecosystem-wide `hassassin` command;
+- Claude Code (proprietary) and Codex (Apache-2.0) are npm dependencies run as separate
+  processes — allowed by the licensing policy, documented as such.
 
 Exposes to other modules:
 
@@ -152,6 +170,9 @@ with joint torques compared against the chosen motors.
 ---
 
 ## Hub — `apps/hub`
+
+Target experience: [10-hub-ux.md](10-hub-ux.md) — dashboard with apps and
+*Start your project here*, project wizard, agentic workspace (chat left, tool right).
 
 Scope: project home (create from template or from a description), stage view with
 gates, document list per domain, combined BOM with prices/stock, interface status

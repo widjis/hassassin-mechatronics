@@ -3,14 +3,14 @@
 Date: 2026-11-11. Sources: shallow clone of `tangency-labs/solidcraft` (the old
 `bherbruck/solidcraft` URL redirects there), `main` at the time of cloning, and the
 browser build at `app.solidcraft.io` driven through its command API. Purpose: decide whether SolidCraft can carry
-milestone M3 (two-way ECAD ↔ MCAD, [09-ecad-mcad.md](../09-ecad-mcad.md)).
+milestones M4 (agentic mechanical design) and M5 (two-way ECAD ↔ MCAD, [09-ecad-mcad.md](../09-ecad-mcad.md)).
 
 Everything below marked **(docs)** comes from the project's own documentation and code;
 **(tried)** was run in the browser build. Nothing was copied into our repository.
 
 ## Verdict
 
-**Fit, with notes.** SolidCraft covers what M3 needs through its CLI and MCP server,
+**Fit, with notes.** SolidCraft covers what M4 and M5 need through its CLI and MCP server,
 its licensing is compatible with ours, and its design file is open JSON. The main gaps
 are 2D drawings (in progress upstream) and live-linked STEP updates (we re-insert or
 replace instead). See [Gaps and how we handle them](#gaps-and-how-we-handle-them).
@@ -33,7 +33,7 @@ replace instead). See [Gaps and how we handle them](#gaps-and-how-we-handle-them
 
 ## Capabilities relevant to us
 
-| Need (M3 and later) | SolidCraft | Source |
+| Need (M4, M5 and later) | SolidCraft | Source |
 |---|---|---|
 | Drive modeling from an agent or script | MCP server (`solidcraft-cli mcp`), headless or bridged to the running app; `execute`, `batch` with rollback, `describe_command` with JSON Schemas, `inspect_design`, `measure`, `body_topology`, `check_parameters`, `screenshot`, `export`, `open`, `save` | (docs) `docs/mcp.md` |
 | Same commands in the browser | `window.solidcraft.execute / request / commands / inspect` | (docs) `docs/browser-api.md` |
@@ -95,17 +95,29 @@ Implications for the adapter:
 
 | Gap | Plan |
 |---|---|
-| 2D drawings not ready | Not needed for M3. Track upstream; contribute if we need it before it lands. |
+| 2D drawings not ready | Not needed for M4/M5. Track upstream; contribute if we need it before it lands. |
 | Inserted STEP is a copy, not a live link to the file | On PCB change, the mech adapter replaces the import (delete + `file.insert_step`, same component name and placement) and re-checks interfaces; ask upstream about a "reload STEP" command. |
 | Persistent naming still has open issues upstream | Prefer **named sketches and user parameters** as interface anchors (`PCB_Envelope`, `pcb_width`) over picked faces; store our interface ids with `document.metadata.set`. |
 | Commands change between releases | Pin a SolidCraft version per project (`toolVersion` in the manifest); run a contract test with `--param-check strict` against each new release. |
 | Brand-licensed UI crates | Never link them; we integrate only through CLI, MCP, browser API, and files. |
 
+## Embedding the web build (for M4)
+
+The owner's target UX ([10-hub-ux.md](../10-hub-ux.md)) embeds SolidCraft's web build
+next to the agent chat. Findings relevant to that:
+- The browser build exposes `window.solidcraft` with the same command ids as MCP
+  (tested above), so an agent bridge can drive it **if the page is on our origin**.
+- The public `app.solidcraft.io` is a different origin and cannot be scripted from our
+  page; self-hosting the unmodified web build (built with `trunk build --release`) is
+  needed, or an upstream `postMessage` bridge.
+- Distributing the unmodified app as SolidCraft is allowed; showing it *inside* another
+  product may fall under `LICENSE-BRAND` §3a — ask the maintainers first.
+
 ## Recommendation
 
 1. Keep ADR-3 (SolidCraft as the first mechanical tool); integrate through **MCP + CLI +
    `.sc`/STEP/URDF files**, never through its UI crates.
-2. For M3, anchor interfaces on **named sketches and parameters** in a template design
+2. For M4/M5, anchor interfaces on **named sketches and parameters** in a template design
    (e.g. a `PCB_Envelope` sketch and `pcb_*` parameters) that our adapter creates and reads.
 3. Do not fork yet. Open upstream issues for what we need (e.g. STEP reload), and fork only
    to prepare a pull request.

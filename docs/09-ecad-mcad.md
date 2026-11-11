@@ -17,7 +17,7 @@ leads:
 | Consumer product with a designed shape (remote, wearable) | Mechanical / industrial design | Shape first → the board must fit it |
 | Robot, machine | Mechanics + kinematics | Assembly and motion → motors and drivers → firmware |
 
-Both directions must work from the first integration milestone (M3).
+Both directions must work from the first integration milestone (M5).
 
 ## 1. Ownership
 

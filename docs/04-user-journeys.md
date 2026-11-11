@@ -2,30 +2,49 @@
 
 These journeys drive priorities: a feature matters if it unblocks one of them.
 
-## J1 — Beginner: "RGB bedside lamp" (guided mode)
+## J1 — Mechatronics: "RGB bedside lamp" (guided, shape first)
 
-1. **Start.** Opens the hub, clicks *New project*, types: "An RGB bedside lamp I can
-   control from my phone, powered by USB-C."
-2. **Requirements.** The AI asks a few plain-language questions (size? battery or USB
-   only? how bright?) and fills the requirements. Gate 1 turns green.
-3. **System architecture.** The AI proposes blocks: USB-C power, ESP32-C3 module, three
-   LED channels with MOSFET drivers, a round enclosure. The user sees a simple block
-   diagram and approves it. Gate 2 green.
-4. **Electronics.** The AI places parts from the library (with stock and price), draws
-   the schematic, runs ERC, creates the PCB, places and routes it, runs DRC. Each step is
-   on the task list; the user can open any step, ask "why?", or undo it.
-5. **Enclosure.** From the board's mounting holes and USB connector, the AI creates an
-   enclosure in the mechanical module, with interface objects for the holes and the USB
-   opening. The user changes the diameter with a slider.
-6. **Firmware.** A firmware project is generated with the pin map from the schematic and
-   a phone-control example. It builds; the user can test it in emulation, then flash it
-   over USB from the browser.
-7. **Check.** A circuit simulation confirms LED currents; interfaces are all green.
-8. **Produce.** One click exports: PCB fabrication ZIP, enclosure STL for 3D printing,
-   firmware binary, and a BOM with shop links.
+The owner's own way of working: visualise in 3D first, then fit the electronics into
+the space that is left.
 
-What it needs: hub, templates, PCB module (phases 5–6), mech adapter + enclosure
-workflow, embedded pin-map generation, SPICE, AI orchestrator.
+1. **Dashboard → Start your project here.** The wizard asks *what are you making?* →
+   **Full mechatronics**. A few questions fill the requirements: USB-C powered, phone
+   control over BLE, about 90 mm across, 5 prototypes. Gate 1 green.
+2. **Agentic mechanical design.** Workspace opens: chat on the left, SolidCraft on the
+   right. "A round lamp with a frosted dome on a wooden-look base." The agent sketches
+   and builds the concept; the user adjusts it directly or by asking.
+3. **Electronics space estimate.** Before the shape is final, the agent lists the rough
+   electrical blocks (USB-C, regulator, BLE module, LED drivers, LEDs) and estimates
+   board area, tallest parts, heat, and an antenna keep-clear zone. They appear as
+   space boxes inside the 3D model, so the user sees whether the shape works.
+4. **Detailed design.** The user refines the base and dome around the space boxes and
+   decides on one board in the base (or two: an LED board under the dome and a control
+   board).
+5. **Generate the board shape.** The PCB envelope comes from the model: outline,
+   screw holes, height-limited zones under the dome, antenna zone, and required
+   positions for USB-C, the button, and the **LEDs** (an optical decision, owned by the
+   mechanical side). Interfaces `outline`, `mount`, `keepout`, `placement`, `cutout`
+   are created.
+6. **Hardware design inside the limits.** The workspace switches to the PCB editor. The
+   agent picks parts (with stock and price), draws the schematic, runs ERC, places and
+   routes the board within the locked outline; DRC flags any space violation.
+7. **Change proposal if space runs out.** "Need +1.5 mm width for routing" goes back to
+   the mechanical side; the user accepts or finds another way.
+8. **Firmware.** Pin map from the schematic, colour effects, BLE control; build, test in
+   emulation, flash over USB from the browser.
+9. **Check.** Collision and clearance in the combined assembly, LED current simulation,
+   simple thermal check; all interfaces green.
+10. **Produce.** PCB fabrication ZIP, STL for the base and dome, firmware binary, BOM
+    with prices.
+
+What it needs: hub shell and wizard (M3), embedded SolidCraft (M4), two-way integration
+with space estimate (M5), embedded (M6), simulation (M7).
+
+## J1b — Beginner: board first
+
+Same lamp for someone who starts from the electronics (e.g. they already have a
+module): **PCB only** in the wizard, then *add an enclosure* later — the enclosure
+follows the board (electronics-led flow in [09](09-ecad-mcad.md)).
 
 ## J2 — Engineer: change propagation
 

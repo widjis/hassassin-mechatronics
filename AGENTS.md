@@ -45,6 +45,9 @@ Read: [docs/00-vision.md](docs/00-vision.md), [docs/01-architecture.md](docs/01-
    [docs/06-licensing.md](docs/06-licensing.md).
 8. **Respect other projects' brands.** Example: SolidCraft's code is MIT/Apache, but its
    name, logo, icons, UI kit, and themes are under a separate license — do not use them.
+   When we show another tool inside the hub (e.g. SolidCraft's web build), it is the
+   **unmodified, version-pinned** build driven only through its public API, so upstream
+   updates never require changes in our core ([docs/10-hub-ux.md](docs/10-hub-ux.md)).
 
 ## 3. Repository layout (monorepo)
 
@@ -63,7 +66,7 @@ hassassin-mechatronics/
 │   ├── sim/
 │   └── robotics/
 └── apps/
-    ├── hub/             web + desktop (offline/self-hosted)
+    ├── hub/             dashboard, project wizard, agentic workspace; web + desktop
     └── cli/             one CLI + MCP server for all modules
 ```
 

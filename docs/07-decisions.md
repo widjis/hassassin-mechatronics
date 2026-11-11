@@ -66,8 +66,29 @@ electronics first because it is our strongest asset. Real products lead from eit
 **Decision:** build order does not define usage order. Every shared value has one
 owner; the other side gets a locked constraint; changes travel as change proposals that
 are accepted or rejected, never as silent overwrites. Both flows (shape first, board
-first) are part of milestone M3. Design: [09-ecad-mcad.md](09-ecad-mcad.md).
+first) are part of the two-way integration milestone (M3 when written; M5 after the
+reorder in ADR-12). Design: [09-ecad-mcad.md](09-ecad-mcad.md).
 **Prior art to study:** IDX/EDMD (ProSTEP iViP) incremental ECAD–MCAD exchange.
+
+## ADR-11 — Our own agentic UI with each tool beside it; SolidCraft embedded unmodified (accepted, 2026-11-11)
+
+**Context:** SolidCraft's UI, look, theme, and brand are under a separate licence; its
+engine is MIT/Apache. Options were: open SolidCraft as-is (A), rebuild a full CAD UI on
+its engine (B), or our own task-focused UI plus the tool itself (C).
+**Decision:** option C. The hub has a dashboard, a project wizard, and an agentic
+workspace (chat + task list left, tool right). Mechanical steps show SolidCraft's
+**unmodified, version-pinned web build, self-hosted** and driven through its public
+command API by a bridge in `modules/mech`, so SolidCraft can be updated without changing
+our core. Design: [10-hub-ux.md](10-hub-ux.md).
+**Conditions:** written confirmation from the SolidCraft maintainers that embedding is
+acceptable under `LICENSE-BRAND`; until then keep the separate-window fallback.
+
+## ADR-12 — Reorder the roadmap around the hub experience (accepted, 2026-11-11)
+
+**Decision:** after M2 (PCB move), build the hub shell (M3) and agentic mechanical design
+(M4) before two-way integration (M5), because the owner's workflow starts on the
+dashboard and in the agentic workspace. The PCB module's agent (Claude API / Claude Code /
+Codex backends, chat UI) becomes the base of `packages/agent` instead of a new build.
 
 ## Open questions
 
@@ -75,3 +96,5 @@ first) are part of milestone M3. Design: [09-ecad-mcad.md](09-ecad-mcad.md).
 2. Local AI model support for offline mode: which runtime, minimum capability.
 3. Where requirements live (manifest vs separate file) — see [03](03-project-manifest.md).
 4. Entity id stability across CAD rebuilds.
+5. Answer from SolidCraft maintainers about embedding (ADR-11).
+6. CLI naming once the PCB moves in: `hassassin pcb <tool>` or keep flat tool names.

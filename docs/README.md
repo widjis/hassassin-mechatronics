@@ -13,5 +13,6 @@
 | [08-glossary.md](08-glossary.md) | Terms |
 | [research/solidcraft.md](research/solidcraft.md) | Evaluation of SolidCraft for the mechanical module |
 | [09-ecad-mcad.md](09-ecad-mcad.md) | Two-way mechanical ↔ electronics integration: ownership, change proposals, checks |
+| [10-hub-ux.md](10-hub-ux.md) | Dashboard, project wizard, agentic workspace, embedding SolidCraft |
 
 Reading order for new people and agents: `AGENTS.md` → 00 → 01 → 02 → 05.
