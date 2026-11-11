@@ -52,10 +52,16 @@ Mechatronics), repository (`hassassin-mechatronics`), packages (`@hassassin/*`),
 (`hassassin`), manifest file (`hassassin.project`), cache folder (`.hassassin/`).
 This matches the existing PCB module.
 
+## ADR-9 — License: MIT OR Apache-2.0 (accepted, 2026-11-11)
+
+**Decision:** our code is dual-licensed MIT OR Apache-2.0 (`LICENSE-MIT`,
+`LICENSE-APACHE`). Contributions are accepted under the same terms.
+**Why:** permissive, so anyone can build on it (including commercially); Apache-2.0
+adds an explicit patent grant; same terms as SolidCraft and most of the Rust ecosystem.
+
 ## Open questions
 
-1. **License** of this repository — recommended MIT OR Apache-2.0.
-2. Desktop shell (Tauri or other) and how solvers are bundled for offline use.
-3. Local AI model support for offline mode: which runtime, minimum capability.
-4. Where requirements live (manifest vs separate file) — see [03](03-project-manifest.md).
-5. Entity id stability across CAD rebuilds.
+1. Desktop shell (Tauri or other) and how solvers are bundled for offline use.
+2. Local AI model support for offline mode: which runtime, minimum capability.
+3. Where requirements live (manifest vs separate file) — see [03](03-project-manifest.md).
+4. Entity id stability across CAD rebuilds.

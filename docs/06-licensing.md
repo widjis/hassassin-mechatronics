@@ -2,9 +2,11 @@
 
 ## Our code
 
-- License for this repository: **to be decided** — recommended **MIT OR Apache-2.0**
-  (dual), matching the Rust ecosystem and SolidCraft. See [07-decisions.md](07-decisions.md).
-- Contributions are accepted under the repository license.
+- This repository is dual-licensed under **MIT OR Apache-2.0**, at the user's option
+  ([LICENSE-MIT](../LICENSE-MIT), [LICENSE-APACHE](../LICENSE-APACHE)), matching the
+  Rust ecosystem and SolidCraft. See ADR-9 in [07-decisions.md](07-decisions.md).
+- Unless stated otherwise, any contribution intentionally submitted for inclusion is
+  dual-licensed the same way, without additional terms or conditions.
 
 ## Rules for dependencies
 
